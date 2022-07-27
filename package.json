@@ -1,40 +1,45 @@
+
 {
-  "name": "koinos-as-sdk-examples",
-  "version": "0.3.13",
+  "name": "koinos-sdk-as-examples",
+  "version": "0.4.2",
   "main": "assembly/index.ts",
   "license": "MIT",
-  "author": "Roamin Roe <roamin@tuta.io>",
-  "repository": "https://github.com/roaminroe/koinos-as-sdk-examples",
+  "author": "Koinos Group <contact@koinos.group>",
+  "repository": "https://github.com/koinos/koinos-system-contracts-as",
   "dependencies": {
-    "commander": "^9.0.0"
+    "koinos-proto-js": "^0.0.3",
+    "local-koinos": "^0.0.5"
   },
   "devDependencies": {
     "@as-covers/core": "^0.2.1",
     "@as-pect/cli": "^6.2.4",
+    "@roaminroe/as-proto-gen": "^0.4.2",
     "@roaminroe/protoc": "^2.4.0",
+    "@types/jest": "^27.5.1",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
-    "as-proto-gen": "^0.2.2",
     "assemblyscript": "^0.19.22",
     "eslint": "^8.7.0",
-    "koinos-abi-proto-gen": "^0.1.6",
-    "koinos-as-gen": "^0.3.5",
-    "koinos-sdk-as": "^0.4.8",
-    "koinos-mock-vm": "^1.0.3",
+    "jest": "^28.1.0",
+    "koinos-abi-proto-gen": "^0.1.11",
+    "koinos-as-gen": "^0.4.8",
+    "koinos-mock-vm": "npm:@roaminroe/koinos-mock-vm@^1.1.3",
+    "koinos-sdk-as": "koinos/koinos-sdk-as#e364972bb67bd962cd6915c2f9c21b115a9b20e9",
+    "koinos-sdk-as-cli": "^0.1.16",
+    "ts-jest": "^28.0.2",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.5",
+    "typescript": "^4.6.4",
     "yaml": "^2.0.0-11"
   },
   "scripts": {
     "lint": "eslint --max-warnings 0 --ext ts \"*/assembly/**/*.ts\"",
-    "buildCalculator": "node cli.js build-all calculator release calculator.proto && node cli.js run-tests calculator",
-    "buildChat": "node cli.js build-all chat release chat.proto",
-    "buildControlledContractUpdate": "node cli.js build-all --generate_authorize controlled_contract_update release update.proto",
-    "buildImmutable": "node cli.js build-all immutable release immutable.proto",
-    "buildNft": "node cli.js build-all nft release nft.proto",
-    "buildStaking": "node cli.js build-all staking release staking.proto",
-    "buildToken": "node cli.js build-all token release token.proto && node cli.js run-tests token",
-    "buildTransactionStorage": "node cli.js build transaction_storage release && node cli.js run-tests transaction_storage",
-    "buildAll": "yarn lint && yarn buildCalculator && yarn buildChat && yarn buildControlledContractUpdate && yarn buildImmutable && yarn buildNft && yarn buildStaking && yarn buildToken && yarn buildTransactionStorage"
+    "buildGovernance": "cd contracts/governance && yarn install && yarn build:release && yarn test",
+    "buildGovernance:ubuntu": "cd contracts/governance && yarn install && yarn build:release && yarn test && yarn integration-tests",
+    "buildVHP": "cd contracts/vhp && yarn install && yarn build:release && yarn test",
+    "buildVHP:ubuntu": "cd contracts/vhp && yarn install && yarn build:release && yarn test && yarn integration-tests",
+    "buildPOB": "cd contracts/pob && yarn install && yarn build:release && yarn test",
+    "buildPOB:ubuntu": "cd contracts/pob && yarn install && yarn build:release && yarn test && yarn integration-tests",
+    "buildAll": "yarn buildGovernance && yarn buildVHP && yarn buildPOB",
+    "buildAll:ubuntu": "yarn buildGovernance:ubuntu && yarn buildVHP:ubuntu && yarn buildPOB:ubuntu"
   }
 }

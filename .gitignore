@@ -4,4 +4,6 @@ build
 \.vs/
 *.wasm
 *.pb
+*.spec.map
+*.spec.wat
 yarn-error.log

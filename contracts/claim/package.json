@@ -1,0 +1,41 @@
+{
+  "name": "claim",
+  "version": "0.1.0",
+  "license": "MIT",
+  "dependencies": {
+    "as-bigint": "^0.5.3",
+    "koinos-proto-as": "^0.4.24",
+    "koinos-proto-js": "^0.0.3",
+    "local-koinos": "^0.0.5"
+  },
+  "devDependencies": {
+    "@as-covers/core": "^0.2.1",
+    "@as-pect/cli": "^6.2.4",
+    "@roaminroe/as-proto": "^0.2.3",
+    "@roaminroe/as-proto-gen": "^0.4.2",
+    "@roaminroe/protoc": "^2.4.0",
+    "@types/jest": "^27.5.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "assemblyscript": "^0.19.22",
+    "eslint": "^8.7.0",
+    "jest": "^28.1.0",
+    "koinos-abi-proto-gen": "^0.1.11",
+    "koinos-sdk-as": "https://github.com/koinos/koinos-sdk-as#testnet-4",
+    "koinos-sdk-as-cli": "https://github.com/koinos/koinos-sdk-as-cli#master",
+    "ts-jest": "^28.0.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.6.4",
+    "yaml": "^2.0.0-11"
+  },
+  "scripts": {
+    "lint": "eslint --max-warnings 0 --ext ts \"*/assembly/**/*.ts\"",
+    "build:debug": "koinos-sdk-as-cli build debug",
+    "build:release": "koinos-sdk-as-cli build release",
+    "test": "koinos-sdk-as-cli run-tests",
+    "integration-tests": "yarn jest",
+    "local-koinos-auto": "local-koinos start -i 5000",
+    "local-koinos:start": "local-koinos start",
+    "local-koinos:stop": "local-koinos stop"
+  }
+}

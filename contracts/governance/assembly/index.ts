@@ -2,10 +2,10 @@ import { System, Protobuf, authority, system_calls, governance, Base64 } from "k
 import { Governance as ContractClass } from "./Governance";
 
 export function main(): i32 {
+  const c = new ContractClass();
+
   const contractArgs = System.getArguments();
   let retbuf = new Uint8Array(1024);
-
-  const c = new ContractClass();
 
   switch (contractArgs.entry_point) {
     case 0xe74b785c: {

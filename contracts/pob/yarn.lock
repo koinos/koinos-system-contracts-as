@@ -1328,7 +1328,7 @@ as-bigint@^0.5.3:
   resolved "https://registry.yarnpkg.com/as-bigint/-/as-bigint-0.5.3.tgz#a0647d0b7ce835077aca33115e71eb26a83df8be"
   integrity sha512-tg9iTO/vPeovOM5CSk1WxYcsfBd/cd3twhBW5PrpcGUfiSEXlPB69eOxFKvSbZnpuDxBAyQ4YBgEkfnYL89Czw==
 
-as-bignum@^0.2.18:
+as-bignum@^0.2.18, as-bignum@^0.2.21:
   version "0.2.21"
   resolved "https://registry.yarnpkg.com/as-bignum/-/as-bignum-0.2.21.tgz#393d5568749fb89625ebcd2a06518b82f9db9a51"
   integrity sha512-VvjDsGYjLnmBnumBdgiIZ+bck48AzkvXPkbsFZdcSaBKNyMjHqrRlCwNZGf1Fj9WUd2QdmVOBURiEYnE7Ee/8w==
@@ -3054,10 +3054,10 @@ koinos-as-gen@0.4.8:
     protobufjs "^6.11.2"
     somap "^0.5.14"
 
-koinos-proto-as@^0.4.24:
-  version "0.4.24"
-  resolved "https://registry.yarnpkg.com/koinos-proto-as/-/koinos-proto-as-0.4.24.tgz#e5980709db6b4749a39be499e0b1310e19c62e1a"
-  integrity sha512-6aPFgAAvwozz8VSEj4Pm7Dw6fZ4xLYVhUH7xpw8QAbyOjPvYoq5KtmH/lqEsD5mPvSmWEYpsOF/KwqF3eNaQ7A==
+koinos-proto-as@^0.4.25:
+  version "0.4.25"
+  resolved "https://registry.yarnpkg.com/koinos-proto-as/-/koinos-proto-as-0.4.25.tgz#1f57f598131b081dadb1ded17dfc76acc2da24a4"
+  integrity sha512-NW+JU5u34iD2/1Kf8emgBy1Jt9x+XxUHGzLlm+U52hSX+gvyosR8gP5Ex/D7/IGFeeGtYLgC+Bk0tHUThaR3Fw==
   dependencies:
     as-proto "npm:@roaminroe/as-proto"
 
@@ -3073,19 +3073,19 @@ koinos-proto-js@^0.0.3:
 
 "koinos-sdk-as-cli@https://github.com/koinos/koinos-sdk-as-cli#master":
   version "0.1.16"
-  resolved "https://github.com/koinos/koinos-sdk-as-cli#89a71575f4064206a4f796e43c22d41d51756c21"
+  resolved "https://github.com/koinos/koinos-sdk-as-cli#c81d726f1bb4f345ae39e7777f5703efd5bafd62"
   dependencies:
     chalk "4.1.2"
     commander "^9.0.0"
 
 "koinos-sdk-as@https://github.com/koinos/koinos-sdk-as#testnet-4":
   version "0.4.11"
-  resolved "https://github.com/koinos/koinos-sdk-as#c7db2c3503c0d3499ba27f40b995ebb2c7a2c139"
+  resolved "https://github.com/koinos/koinos-sdk-as#b36532b8b01d5461073c57ae83b79dddfe678c38"
   dependencies:
     as-bignum "^0.2.18"
     koinos-as-gen "0.4.8"
     koinos-mock-vm "https://github.com/koinos/koinos-mock-vm#testnet-4"
-    koinos-proto-as "^0.4.24"
+    koinos-proto-as "^0.4.25"
 
 leven@^3.1.0:
   version "3.1.0"
@@ -4572,6 +4572,11 @@ typescript@^4.6.4:
   version "4.7.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.4.tgz#1a88596d1cf47d59507a1bcdfb5b9dfe4d488235"
   integrity sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==
+
+uint256@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/uint256/-/uint256-1.0.8.tgz#8442baad8b325c09c7757ecd11d8b2135c610b09"
+  integrity sha512-xTU52MNfJRDHCuTFzfw6p6rWz7I39fqE4KuMCLCZ9Kils5TG2RXXz4dhqZbKEgtrkIG6BP8RUhssGDJ6KI/5zg==
 
 unique-filename@^1.1.1:
   version "1.1.1"

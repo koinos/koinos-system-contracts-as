@@ -1,8 +1,6 @@
 import { authority, chain, protocol, system_call_ids, System, Protobuf,
   Base58, value, error, system_calls, Token, SafeMath, token, Crypto } from "koinos-sdk-as";
 
-System.MAX_BUFFER_SIZE = 1024 * 1024; // 1 MB
-
 namespace Constants {
   export const NAME = "Virtual Hash Power"
   export const SYMBOL = "VHP";
@@ -10,23 +8,42 @@ namespace Constants {
   export const SUPPLY_ID: u32 = 0;
   export const BALANCE_ID: u32 = 1;
   export const SUPPLY_KEY = new Uint8Array(0);
-  export var   CONTRACT_ID: Uint8Array;
+
+  let contractId: Uint8Array | null = null;
+
+  export function ContractId() : Uint8Array {
+    if (contractId === null) {
+      contractId = System.getContractId()
+    }
+
+    return contractId!;
+  }
 }
 
 namespace State {
   export namespace Space {
-    export var SUPPLY: chain.object_space;
-    export var BALANCE: chain.object_space;
+    let supply : chain.object_space | null = null;
+    let balance : chain.object_space | null = null;
+
+    export function Supply() : chain.object_space {
+      if (supply === null) {
+        supply = new chain.object_space(true, Constants.ContractId(), 0);
+      }
+
+      return supply!;
+    }
+
+    export function Balance() : chain.object_space {
+      if (balance === null) {
+        balance = new chain.object_space(true, Constants.ContractId(), 1);
+      }
+
+      return balance!;
+    }
   }
 }
 
 export class Vhp {
-
-  constructor() {
-    Constants.CONTRACT_ID = System.getContractId();
-    State.Space.SUPPLY = new chain.object_space(true, Constants.CONTRACT_ID, Constants.SUPPLY_ID);
-    State.Space.BALANCE = new chain.object_space(true, Constants.CONTRACT_ID, Constants.BALANCE_ID);
-  }
 
   name(args?: token.name_arguments): token.name_result {
     let result = new token.name_result();
@@ -49,7 +66,7 @@ export class Vhp {
   total_supply(args?: token.total_supply_arguments): token.total_supply_result {
     let result = new token.total_supply_result();
 
-    let supplyObject = System.getObject<Uint8Array, token.balance_object>(State.Space.SUPPLY, Constants.SUPPLY_KEY, token.balance_object.decode);
+    let supplyObject = System.getObject<Uint8Array, token.balance_object>(State.Space.Supply(), Constants.SUPPLY_KEY, token.balance_object.decode);
 
     if (!supplyObject) {
       result.value = 0;
@@ -66,7 +83,7 @@ export class Vhp {
 
     System.require(args.owner != null, 'owner cannot be null');
 
-    let fromBalanceObj = System.getObject<Uint8Array, token.balance_object>(State.Space.BALANCE, args.owner!, token.balance_object.decode);
+    let fromBalanceObj = System.getObject<Uint8Array, token.balance_object>(State.Space.Balance(), args.owner!, token.balance_object.decode);
 
     if (!fromBalanceObj) {
       result.value = 0;
@@ -90,7 +107,7 @@ export class Vhp {
       error.error_code.authorization_failure
     );
 
-    let fromBalanceObj = System.getObject<Uint8Array, token.balance_object>(State.Space.BALANCE, args.from!, token.balance_object.decode);
+    let fromBalanceObj = System.getObject<Uint8Array, token.balance_object>(State.Space.Balance(), args.from!, token.balance_object.decode);
 
     if (!fromBalanceObj) {
       fromBalanceObj = new token.balance_object();
@@ -99,7 +116,7 @@ export class Vhp {
 
     System.require(fromBalanceObj.value >= args.value, "account 'from' has insufficient balance", error.error_code.failure);
 
-    let toBalanceObj = System.getObject<Uint8Array, token.balance_object>(State.Space.BALANCE, args.to!, token.balance_object.decode);
+    let toBalanceObj = System.getObject<Uint8Array, token.balance_object>(State.Space.Balance(), args.to!, token.balance_object.decode);
 
     if (!toBalanceObj) {
       toBalanceObj = new token.balance_object();
@@ -109,8 +126,8 @@ export class Vhp {
     fromBalanceObj.value -= args.value;
     toBalanceObj.value += args.value;
 
-    System.putObject(State.Space.BALANCE, args.from!, fromBalanceObj, token.balance_object.encode);
-    System.putObject(State.Space.BALANCE, args.to!, toBalanceObj, token.balance_object.encode);
+    System.putObject(State.Space.Balance(), args.from!, fromBalanceObj, token.balance_object.encode);
+    System.putObject(State.Space.Balance(), args.to!, toBalanceObj, token.balance_object.encode);
 
     let event = new token.transfer_event();
     event.from = args.from;
@@ -132,14 +149,14 @@ export class Vhp {
 
     if (System.getCaller().caller_privilege != chain.privilege.kernel_mode) {
       if (BUILD_FOR_TESTING) {
-        System.requireAuthority(authority.authorization_type.contract_call, Constants.CONTRACT_ID);
+        System.requireAuthority(authority.authorization_type.contract_call, Constants.ContractId());
       }
       else {
         System.fail('insufficient privileges to mint', error.error_code.authorization_failure);
       }
     }
 
-    let supplyObject = System.getObject<Uint8Array, token.balance_object>(State.Space.SUPPLY, Constants.SUPPLY_KEY, token.balance_object.decode);
+    let supplyObject = System.getObject<Uint8Array, token.balance_object>(State.Space.Supply(), Constants.SUPPLY_KEY, token.balance_object.decode);
 
     if (!supplyObject) {
       supplyObject = new token.balance_object();
@@ -148,7 +165,7 @@ export class Vhp {
 
     System.require(supplyObject.value <= u64.MAX_VALUE - args.value, 'mint would overflow supply', error.error_code.failure);
 
-    let balanceObject = System.getObject<Uint8Array, token.balance_object>(State.Space.BALANCE, args.to!, token.balance_object.decode);
+    let balanceObject = System.getObject<Uint8Array, token.balance_object>(State.Space.Balance(), args.to!, token.balance_object.decode);
 
     if (!balanceObject) {
       balanceObject = new token.balance_object();
@@ -158,8 +175,8 @@ export class Vhp {
     balanceObject.value += args.value;
     supplyObject.value += args.value;
 
-    System.putObject(State.Space.SUPPLY, Constants.SUPPLY_KEY, supplyObject, token.balance_object.encode);
-    System.putObject(State.Space.BALANCE, args.to!, balanceObject, token.balance_object.encode);
+    System.putObject(State.Space.Supply(), Constants.SUPPLY_KEY, supplyObject, token.balance_object.encode);
+    System.putObject(State.Space.Balance(), args.to!, balanceObject, token.balance_object.encode);
 
     let event = new token.mint_event();
     event.to = args.to;
@@ -183,7 +200,7 @@ export class Vhp {
       error.error_code.authorization_failure
     );
 
-    let fromBalanceObject = System.getObject<Uint8Array, token.balance_object>(State.Space.BALANCE, args.from!, token.balance_object.decode);
+    let fromBalanceObject = System.getObject<Uint8Array, token.balance_object>(State.Space.Balance(), args.from!, token.balance_object.decode);
 
     if (fromBalanceObject == null) {
       fromBalanceObject = new token.balance_object();
@@ -192,7 +209,7 @@ export class Vhp {
 
     System.require(fromBalanceObject.value >= args.value, "account 'from' has insufficient balance", error.error_code.failure);
 
-    let supplyObject = System.getObject<Uint8Array, token.balance_object>(State.Space.SUPPLY, Constants.SUPPLY_KEY, token.balance_object.decode);
+    let supplyObject = System.getObject<Uint8Array, token.balance_object>(State.Space.Supply(), Constants.SUPPLY_KEY, token.balance_object.decode);
 
     if (!supplyObject) {
       supplyObject = new token.balance_object();
@@ -204,8 +221,8 @@ export class Vhp {
     supplyObject.value -= args.value;
     fromBalanceObject.value -= args.value;
 
-    System.putObject(State.Space.SUPPLY, Constants.SUPPLY_KEY, supplyObject, token.balance_object.encode);
-    System.putObject(State.Space.BALANCE, args.from!, fromBalanceObject, token.balance_object.encode);
+    System.putObject(State.Space.Supply(), Constants.SUPPLY_KEY, supplyObject, token.balance_object.encode);
+    System.putObject(State.Space.Balance(), args.from!, fromBalanceObject, token.balance_object.encode);
 
     let event = new token.burn_event();
     event.from = args.from;

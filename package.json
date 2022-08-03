@@ -1,4 +1,3 @@
-
 {
   "name": "koinos-sdk-as-examples",
   "version": "0.4.2",
@@ -24,7 +23,7 @@
     "koinos-abi-proto-gen": "^0.1.11",
     "koinos-as-gen": "^0.4.8",
     "koinos-mock-vm": "npm:@roaminroe/koinos-mock-vm@^1.1.3",
-    "koinos-sdk-as": "koinos/koinos-sdk-as#e364972bb67bd962cd6915c2f9c21b115a9b20e9",
+    "koinos-sdk-as": "https://github.com/koinos/koinos-sdk-as#testnet-4",
     "koinos-sdk-as-cli": "^0.1.16",
     "ts-jest": "^28.0.2",
     "ts-node": "^10.4.0",
